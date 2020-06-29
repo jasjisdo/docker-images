@@ -107,7 +107,14 @@ COPY --chown=oracle:dba --from=builder $ORACLE_BASE $ORACLE_BASE
 
 USER root
 RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
-    $ORACLE_HOME/root.sh
+    $ORACLE_HOME/root.sh && \
+    chown -R :dba $ORACLE_BASE && \
+    chmod -R 775 $ORACLE_BASE && \
+    chmod g+s $ORACLE_BASE
+
+USER oracle
+RUN echo userid: $(id -u)
+RUN echo groupid: $(id -g)
 
 USER oracle
 WORKDIR /home/oracle
